@@ -10,9 +10,13 @@ public class BasicTokenizer implements Tokenizer{
     final String wordDelimiters = " \t\n\r\f\"\1\u000B,*#$^&+=!?-_()[]{}|\\:<>;./%'";
 
     protected Map<String,Integer> frequencies;
+    private Integer numUniqueTokens;
+    private Integer numNonUniqueTokens;
 
     public BasicTokenizer(){
-        frequencies = new HashMap<String, Integer>();
+        this.numUniqueTokens = 0;
+        this.numNonUniqueTokens = 0;
+        this.frequencies = new HashMap<String, Integer>();
     }
 
     @Override
@@ -49,6 +53,8 @@ public class BasicTokenizer implements Tokenizer{
             value = frequencies.get(key) + 1;
         }
         frequencies.put(key, value);
+        numUniqueTokens++;
+        numNonUniqueTokens+=value;
     }
 
     private String preprocess(String text){
@@ -75,5 +81,23 @@ public class BasicTokenizer implements Tokenizer{
         //System.out.println("Decimal : " + temp.toString());
 
         return sb.toString();
+    }
+
+    //GETTERS AND SETTERS
+
+    public Integer getNumUniqueTokens() {
+        return numUniqueTokens;
+    }
+
+    public void setNumUniqueTokens(Integer numUniqueTokens) {
+        this.numUniqueTokens = numUniqueTokens;
+    }
+
+    public Integer getNumNonUniqueTokens() {
+        return numNonUniqueTokens;
+    }
+
+    public void setNumNonUniqueTokens(Integer numNonUniqueTokens) {
+        this.numNonUniqueTokens = numNonUniqueTokens;
     }
 }

@@ -1,15 +1,16 @@
+import java.io.IOException;
 import java.util.*;
 
 /**
- * Collects and stores tokens so that they can easily be sorted by term or frequency.
- * Not very space efficient, requires 2n space, where n is the number of term-frequency pairs.
+ * Global HashTable:
+ * Collects and stores tokens and frequencies.
  */
 public class TokenCollector {
     private Map<String, Integer> frequencies;
     private Integer uniqueTokens;
     private Integer nonuniqueTokens;
 
-    public TokenCollector(){
+    public TokenCollector() throws IOException {
         frequencies = new HashMap<String, Integer>();
         uniqueTokens = 0;
         nonuniqueTokens = 0;

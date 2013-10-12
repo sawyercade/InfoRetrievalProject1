@@ -13,21 +13,29 @@ import java.io.IOException;
 public class DocumentAnalyzer {
 
     protected Tokenizer tokenizer;
-    
-    public DocumentAnalyzer(){
+    protected Filter filter;
+
+    /**
+     * Creates a new DocumentAnalyzer. A new DocumentAnalyzer should be used for each document in the collection,
+     * unless you want to treat two separate documents as actually being the same document.
+     */
+    public DocumentAnalyzer() throws IOException {
         tokenizer = new BasicTokenizer();
+        filter = new Filter();
     }
 
+    /**
+     * Tokenizes and calculates frequencies for the file indicated by path. Note that
+     * @param path
+     * @return
+     * @throws IOException
+     */
     public Map<String, Integer> tokenize(String path) throws IOException{
-        
         //Parse the document
         Document doc = Jsoup.parse(readFile(path));
 
         //Get stripped text
         String text = doc.text();
-
-        //TESTING
-        //System.out.println("DA:\n" + text+ "\n");
 
         //Get all links in the document
         Elements links = doc.select("a");
@@ -35,6 +43,9 @@ public class DocumentAnalyzer {
         //Count frequency of each token
         tokenizer.tokenize(text);
         tokenizer.tokenize(links);
+
+        //Filter tokens
+        filter.filter(tokenizer.getFrequencies());
 
         return tokenizer.getFrequencies();
     }
@@ -46,5 +57,29 @@ public class DocumentAnalyzer {
 
     public String testJsoup(String path) throws IOException{
         return Jsoup.parse(readFile(path)).text();
+    }
+
+    /**
+     * Gets the number of unique tokens for this document post-filtering.
+     * To get pre-filtering, use tokenizer.getNumUniqueTokens().
+     * @return
+     */
+    public Integer getNumUniqueTokens(){
+        return tokenizer.getFrequencies().size();
+    }
+
+    /**
+     * Gets the number of non-unique tokens for this document post-filtering.
+     * To get pre-filtering, use tokenizer.getNumNonUniqueTokens().
+     * @return
+     */
+    public Integer getNumNonUniqueTokens(){
+        int numTokens = 0;
+
+        //Loop over the tokens for this document and add up their frequencies
+        for (Map.Entry<String, Integer> entry : tokenizer.getFrequencies().entrySet()){
+            numTokens+=entry.getValue();
+        }
+        return numTokens;
     }
 }

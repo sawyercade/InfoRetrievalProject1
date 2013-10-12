@@ -8,4 +8,10 @@ public interface Tokenizer {
     void tokenize(Elements elements);
 
     Map<String, Integer> getFrequencies();
+
+    Integer getNumUniqueTokens();
+    void setNumUniqueTokens(Integer numUniqueTokens);
+
+    Integer getNumNonUniqueTokens();
+    void setNumNonUniqueTokens(Integer numNonUniqueTokens);
 }
