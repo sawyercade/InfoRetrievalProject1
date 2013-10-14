@@ -24,7 +24,7 @@ public class LocalHashTable implements Iterable<Map.Entry<String, Integer>>{
             value = frequencies.get(key) + 1;
         }
         frequencies.put(key, value);
-        numNonUniqueTokens+=value;
+        numNonUniqueTokens++;
     }
 
     /**
