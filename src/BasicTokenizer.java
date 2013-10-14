@@ -1,22 +1,20 @@
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 public class BasicTokenizer implements Tokenizer{
 
     final String wordDelimiters = " \t\n\r\f\"\1\u000B,*#$^&+=!?-_()[]{}|\\:<>;./%'";
 
-    protected Map<String,Integer> frequencies;
+    protected LocalHashTable localHashTable;
     private Integer numUniqueTokens;
     private Integer numNonUniqueTokens;
 
     public BasicTokenizer(){
         this.numUniqueTokens = 0;
         this.numNonUniqueTokens = 0;
-        this.frequencies = new HashMap<String, Integer>();
+        this.localHashTable = new LocalHashTable();
     }
 
     @Override
@@ -25,7 +23,7 @@ public class BasicTokenizer implements Tokenizer{
         String preprocessedText = preprocess(text);
         StringTokenizer tokenizer = new StringTokenizer(preprocessedText, wordDelimiters);
         while (tokenizer.hasMoreTokens()){
-            incrementFrequency(tokenizer.nextToken().toLowerCase());
+            localHashTable.incrementFrequency(tokenizer.nextToken().toLowerCase());
         }
     }
 
@@ -37,25 +35,16 @@ public class BasicTokenizer implements Tokenizer{
             //If the url is relative, throw it away. We have no way of resolving the baseUri of test documents.
             if(url.startsWith("www.") || url.startsWith("http://") || url.startsWith("https://")){
                 //Store the url as a token if it's absolute
-                incrementFrequency(url);
+                localHashTable.incrementFrequency(url);
             }
         }
     }
 
     @Override
-    public Map<String, Integer> getFrequencies() {
-        return frequencies;
+    public LocalHashTable getLocalHashTable() {
+        return localHashTable;
     }
 
-    private void incrementFrequency(String key){
-        Integer value = 1;
-        if(frequencies.containsKey(key)){
-            value = frequencies.get(key) + 1;
-        }
-        frequencies.put(key, value);
-        numUniqueTokens++;
-        numNonUniqueTokens+=value;
-    }
 
     private String preprocess(String text){
         return text.replace("\\", "\\\\");

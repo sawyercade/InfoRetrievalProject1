@@ -7,7 +7,7 @@ public interface Tokenizer {
 
     void tokenize(Elements elements);
 
-    Map<String, Integer> getFrequencies();
+    LocalHashTable getLocalHashTable();
 
     Integer getNumUniqueTokens();
     void setNumUniqueTokens(Integer numUniqueTokens);

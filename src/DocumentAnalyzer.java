@@ -25,12 +25,12 @@ public class DocumentAnalyzer {
     }
 
     /**
-     * Tokenizes and calculates frequencies for the file indicated by path. Note that
+     * Tokenizes and calculates localHashTable for the file indicated by path. Note that
      * @param path
      * @return
      * @throws IOException
      */
-    public Map<String, Integer> tokenize(String path) throws IOException{
+    public LocalHashTable tokenize(String path) throws IOException{
         //Parse the document
         Document doc = Jsoup.parse(readFile(path));
 
@@ -45,9 +45,9 @@ public class DocumentAnalyzer {
         tokenizer.tokenize(links);
 
         //Filter tokens
-        filter.filter(tokenizer.getFrequencies());
+        filter.filter(tokenizer.getLocalHashTable());
 
-        return tokenizer.getFrequencies();
+        return tokenizer.getLocalHashTable();
     }
 
     public static String readFile(String path) throws IOException{
@@ -65,7 +65,7 @@ public class DocumentAnalyzer {
      * @return
      */
     public Integer getNumUniqueTokens(){
-        return tokenizer.getFrequencies().size();
+        return tokenizer.getLocalHashTable().getNumUniqueTokens();
     }
 
     /**
@@ -74,12 +74,6 @@ public class DocumentAnalyzer {
      * @return
      */
     public Integer getNumNonUniqueTokens(){
-        int numTokens = 0;
-
-        //Loop over the tokens for this document and add up their frequencies
-        for (Map.Entry<String, Integer> entry : tokenizer.getFrequencies().entrySet()){
-            numTokens+=entry.getValue();
-        }
-        return numTokens;
+        return tokenizer.getNumNonUniqueTokens();
     }
 }

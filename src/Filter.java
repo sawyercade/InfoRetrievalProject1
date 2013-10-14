@@ -15,21 +15,21 @@ public class Filter {
     }
 
     /**
-     * Removes stopwords and other non-useful tokens from a map of token frequencies
-     * @param tokens
+     * Removes stopwords and other non-useful tokens from a map of token localHashTable
+     * @param localHashTable
      * @return
      */
-    public void filter(Map<String, Integer> tokens){
-        removeStopwords(tokens);
-        removeMinLengthTokens(tokens);
+    public void filter(LocalHashTable localHashTable){
+        removeStopwords(localHashTable);
+        removeMinLengthTokens(localHashTable);
     }
 
     /**
      * Remove tokens of length < MINIMUM_TOKEN_LENGTH
      * @param tokens
      */
-    private void removeMinLengthTokens(Map<String, Integer> tokens) {
-        for(Map.Entry<String, Integer> token : tokens.entrySet()){
+    private void removeMinLengthTokens(LocalHashTable tokens) {
+        for(Map.Entry<String, Integer> token : tokens){
             if (token.getKey().length()<MINIMUM_TOKEN_LENGTH){
                 tokens.remove(token); //make sure to remove using the iterator, not the actual key string value
             }
@@ -40,7 +40,7 @@ public class Filter {
      * Remove all stopwords from the set of tokens
      * @param tokens
      */
-    private void removeStopwords(Map<String, Integer> tokens) {
+    private void removeStopwords(LocalHashTable tokens) {
         for(Map.Entry<String, Integer> stopword : StopWords.entrySet()){
             tokens.remove(stopword.getKey());
         }

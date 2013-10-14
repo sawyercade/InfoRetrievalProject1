@@ -21,7 +21,7 @@ public class Project1 {
         int numFiles = inFiles.length;
         File outDir = new File(args[1]);
 
-        //stores tokens and frequencies across documents
+        //stores tokens and localHashTable across documents
         TokenCollector collector = new TokenCollector();
 
         tokenizeAndWriteStartTime = System.currentTimeMillis();
@@ -30,12 +30,8 @@ public class Project1 {
         int fileCounter = 0;
         for(File inFile : inFiles){
             DocumentAnalyzer analyzer = new DocumentAnalyzer(); //processes the document
-            Map<String, Integer> freqs = analyzer.tokenize(inFile.getAbsolutePath());
+            Map<String, Integer> freqs = analyzer.tokenize(inFile.getAbsolutePath()).getFrequencies();
             collector.addTokens(freqs);
-
-//            for (Map.Entry<String, Integer> entry : freqs.entrySet()){
-//
-//            }
 
             writeTokensToFile(freqs, outDir.getAbsolutePath()+"/"+inFile.getName());
             fileCounter++;

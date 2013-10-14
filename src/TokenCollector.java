@@ -3,23 +3,23 @@ import java.util.*;
 
 /**
  * Global HashTable:
- * Collects and stores tokens and frequencies.
+ * Collects and stores tokens and localHashTable.
  */
-public class TokenCollector {
+public class TokenCollector implements Iterable<Map.Entry<String, Integer>>{
     private Map<String, Integer> frequencies;
-    private Integer uniqueTokens;
-    private Integer nonuniqueTokens;
+    private Long uniqueTokens;
+    private Long nonuniqueTokens;
 
     public TokenCollector() throws IOException {
         frequencies = new HashMap<String, Integer>();
-        uniqueTokens = 0;
-        nonuniqueTokens = 0;
+        uniqueTokens = (long)0;
+        nonuniqueTokens = (long)0;
     }
 
     public TokenCollector(Map<String, Integer> map){
         frequencies = map;
-        uniqueTokens = 0;
-        nonuniqueTokens = 0;
+        uniqueTokens = (long)0;
+        nonuniqueTokens = (long)0;
     }
 
     public void addTokens(Map<String, Integer> newTokens){
@@ -35,6 +35,14 @@ public class TokenCollector {
             frequencies.put(key, value);
             nonuniqueTokens += value;
         }
+    }
+
+    public void removeToken(String token) throws IRException{
+        if(!frequencies.containsKey(token)){
+            throw new IRException("Attempting to remove a token that doesn't exist in frequencies");
+        }
+        nonuniqueTokens -= frequencies.remove(token);
+        uniqueTokens--;
     }
 
     public List<TermFreq> sortFrequenciesByTerm(){
@@ -72,19 +80,47 @@ public class TokenCollector {
         this.frequencies = frequencies;
     }
 
-    public Integer getUniqueTokens() {
+    public Long getUniqueTokens() {
         return uniqueTokens;
     }
 
-    public void setUniqueTokens(Integer uniqueTokens) {
+    public void setUniqueTokens(Long uniqueTokens) {
         this.uniqueTokens = uniqueTokens;
     }
 
-    public Integer getNonuniqueTokens() {
+    public Long getNonuniqueTokens() {
         return nonuniqueTokens;
     }
 
-    public void setNonuniqueTokens(Integer nonuniqueTokens) {
+    public void setNonuniqueTokens(Long nonuniqueTokens) {
         this.nonuniqueTokens = nonuniqueTokens;
+    }
+
+    @Override
+    public Iterator<Map.Entry<String, Integer>> iterator() {
+        Iterator<Map.Entry<String, Integer>> iterator = new Iterator<Map.Entry<String, Integer>>(){
+            Iterator<Map.Entry<String, Integer>> mapIterator = frequencies.entrySet().iterator();
+            Map.Entry<String, Integer> currentEntry;
+
+            @Override
+            public boolean hasNext() {
+                return mapIterator.hasNext();
+            }
+
+            @Override
+            public Map.Entry<String, Integer> next() {
+                this.currentEntry = mapIterator.next();
+                return currentEntry;
+            }
+
+            @Override
+            public void remove(){
+                nonuniqueTokens -= frequencies.get(currentEntry.getKey());
+                uniqueTokens--;
+                mapIterator.remove();
+            }
+        };
+
+        return iterator;
     }
 }
