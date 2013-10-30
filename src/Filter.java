@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 public class Filter {
     public static final int MINIMUM_TOKEN_LENGTH = 2;
-    public static final String STOPWORDS_FILE_PATH = "..\\stoplist.txt";
+    public static final String STOPWORDS_FILE_PATH = "C:\\Users\\Sawyer\\Projects\\InfoRetrieval\\stoplist.txt";
 
     private Map<String, Integer> StopWords;
 

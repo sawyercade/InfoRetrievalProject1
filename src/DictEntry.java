@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class DictEntry {
+public class DictEntry implements Comparable<DictEntry>{
     private String term;
     private Integer numDocs;
     private Float idf;
@@ -52,5 +52,10 @@ public class DictEntry {
 
     public void setIdf(Float idf) {
         this.idf = idf;
+    }
+
+    @Override
+    public int compareTo(DictEntry o) {
+        return this.term.compareTo(o.getTerm());
     }
 }
